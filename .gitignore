@@ -1,0 +1,4 @@
+venv/
+*.sublime-workspace
+*.pyc
+*.sqlite3
