@@ -1,0 +1,12 @@
+{% extends "person/base.html" %}
+
+{% block body %}
+
+<form method="post" action="{% url 'location:create' %}">
+
+{% csrf_token %}
+{{ form }}
+<input type="submit" name="submit">
+
+</form>
+{% endblock body %}

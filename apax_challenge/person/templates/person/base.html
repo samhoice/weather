@@ -3,9 +3,17 @@
 </head>
 <body>
 
+{% if user.is_authenticated %}
+<a href="{% url 'location:create' %}">New Location</a>
+{% else %}
+<a href="{% url 'person:create' %}">New User</a>
+{% endif %}
+<hr/>
 {% block body %}
 
 {% endblock body %}
 
+<hr/>
+<a href="{% url 'person:logout' %}">Logout</a>
 </body>
 </html>
