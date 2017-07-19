@@ -1,0 +1,15 @@
+{% include "person/base.html" %}
+
+{% block body %}
+
+<h3>
+{{ person.user.username }}
+</h3>
+
+{% for loc in person.location.all %}
+
+{{ loc }}</br>
+
+{% endfor %}
+
+{% endblock %}
