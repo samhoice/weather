@@ -1,12 +1,19 @@
 {% extends "person/base.html" %}
+{% load bootstrap3 %}
+
+
+{% block title %}
+New Location
+{% endblock %}
 
 {% block body %}
 
+<h3>Create a new location and add it to your list</h3>
+
 <form method="post" action="{% url 'location:create' %}">
-
 {% csrf_token %}
-{{ form }}
-<input type="submit" name="submit">
+{% bootstrap_form form %}
 
+<input type="submit" class="btn" name="submit">
 </form>
 {% endblock body %}

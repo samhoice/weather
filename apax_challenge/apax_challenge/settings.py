@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
     'location',
     'person',
 ]
@@ -121,5 +122,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_URL = '/u/login'
+LOGIN_URL = '/p/login'
 LOGIN_REDIRECT_URL = '/'

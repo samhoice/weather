@@ -1,7 +1,23 @@
 {% extends "person/base.html" %}
 
+
+{% block title %}
+Location Detail
+{% endblock %}
+
+
 {% block body %}
 
-{{ object }}
+<h3>Detail for {{ object }}</h3>
+
+<p>
+	{{ object.city}}, {{ object.state }} {{ object.zipcode }}<br/>
+	({{ object.lat}}, {{ object.lon }})
+</p>
+
+
+<p>{{ object.high }}/{{ object.low }}</p>
+
+<p>{{ object.detailed_forecast }}</p>
 
 {% endblock body %}

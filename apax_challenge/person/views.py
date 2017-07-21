@@ -23,7 +23,6 @@ class PersonView(DetailView):
 	model = Person
 	template_name = 'person/detail.html'
 
-
 class PersonForm(forms.Form):
 	name = forms.CharField()
 	password = forms.CharField(widget=forms.PasswordInput)

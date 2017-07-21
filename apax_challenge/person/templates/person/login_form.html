@@ -1,8 +1,11 @@
+{% load bootstrap3 %}
+
+
 <form method="post" >
 {% csrf_token %}
 
-{{ form }}
+{% bootstrap_form form %}
 
-<input type="submit" name="submit" value="submit"/>
+<input type="submit" class="btn" name="submit" value="submit"/>
 
 </form>

@@ -1,15 +1,46 @@
 {% extends "person/base.html" %}
 
+
+{% block title %}Locations for {{ person.user.username }}{% endblock %}
+
 {% block body %}
 
 <h3>
 {{ person.user.username }}
 </h3>
 
-{% for loc in person.location.all %}
+<table class="table table-striped">
 
-{{ loc }}</br>
+<tr>
+	<th>Location</th>
+	<th>High</th>
+	<th>Low</th>
+	<th>Descriptive</th>
+	<th>Last Updated</th>
+</tr>
+
+{% for loc in person.location.all %}
+<tr>
+	<td>
+		<a href="{% url 'location:detail' loc.pk %}">
+		{{ loc.city }}, {{ loc.state }} {{ loc.zipcode }}
+		</a>
+	</td>
+	<td>
+		{{ loc.high }}
+	</td>
+	<td>
+		{{ loc.low }}
+	</td>
+	<td>
+		{{ loc.short_forecast }}
+	</td>
+	<td>
+		UPDATED
+	</td>
+</tr>
 
 {% endfor %}
+</table>
 
 {% endblock %}
