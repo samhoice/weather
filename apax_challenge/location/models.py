@@ -17,7 +17,9 @@ class Location(models.Model):
 	wind_dir = models.CharField(max_length=3, default="")
 
 	short_forecast = models.TextField(default="")
-	detailed_forcast = models.TextField(default="")
+	detailed_forecast = models.TextField(default="")
+
+	last_update = models.DateTimeField(null=True)
 
 	def __str__(self):
 		return "{}".format(self.zipcode)

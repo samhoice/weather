@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^p/', include('person.urls', namespace="person")),
     url(r'^l/', include('location.urls', namespace="location")),
-    url(r'^$', RedirectView.as_view(url=reverse_lazy('person:home'))),
+    url(r'^$', RedirectView.as_view(url=reverse_lazy('person:home')), name="home"),
 ]

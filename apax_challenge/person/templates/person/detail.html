@@ -17,6 +17,7 @@
 	<th>Low</th>
 	<th>Descriptive</th>
 	<th>Last Updated</th>
+	<th></th>
 </tr>
 
 {% for loc in person.location.all %}
@@ -36,7 +37,10 @@
 		{{ loc.short_forecast }}
 	</td>
 	<td>
-		UPDATED
+		{{ loc.last_update }}
+	</td>
+	<td>
+		<a href="{% url 'location:refresh' loc.pk %}"><span class="glyphicon glyphicon-refresh"></span></a>
 	</td>
 </tr>
 

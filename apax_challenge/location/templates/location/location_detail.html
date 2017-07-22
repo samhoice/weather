@@ -8,7 +8,9 @@ Location Detail
 
 {% block body %}
 
-<h3>Detail for {{ object }}</h3>
+<h3>Detail for {{ object }}<br/>
+<small>Last Updated: {{ object.last_update }}</small>
+</h3>
 
 <p>
 	{{ object.city}}, {{ object.state }} {{ object.zipcode }}<br/>

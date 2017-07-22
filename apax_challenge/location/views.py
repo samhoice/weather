@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, DetailView
 from django.views import View
@@ -12,6 +12,8 @@ from .helpers import get_weather
 
 import requests
 import json
+from django.utils import timezone
+from datetime import timedelta
 
 
 # Create your views here.
@@ -56,17 +58,34 @@ class LocationDetail(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(LocationDetail, self).get_context_data(**kwargs)
-		weather_dict = get_weather(context['object'].lat, context['object'].lon)
 
-		context['object'].high = weather_dict['high']
-		context['object'].low = weather_dict['low']
+		if(not context['object'].last_update or
+			timezone.now() - context['object'].last_update > timedelta(0, 300)):
+			weather_dict = get_weather(context['object'].lat, context['object'].lon)
+			context['object'].high = weather_dict['high']
+			context['object'].low = weather_dict['low']
 
-		# context['object'].wind_speed = weather_dict['wind_speed']
+			# context['object'].wind_speed = weather_dict['wind_speed']
 
-		context['object'].short_forecast = weather_dict['short_forecast']
-		context['object'].detailed_forecast = weather_dict['detailed_forecast']
+			context['object'].short_forecast = weather_dict['short_forecast']
+			context['object'].detailed_forecast = weather_dict['detailed_forecast']
 
-		context['object'].save()
+			context['object'].last_update = timezone.now()
+
+			context['object'].save()
 
 		return context
 
+
+class LocationRefresh(View):
+	def get(self, request, pk):
+		loc = get_object_or_404(Location, pk=pk)
+		weather_dict = get_weather(loc.lat, loc.lon)
+		loc.high = weather_dict['high']
+		loc.low = weather_dict['low']
+		loc.short_forecast = weather_dict['short_forecast']
+		loc.detailed_forecast = weather_dict['detailed_forecast']
+		loc.last_update = timezone.now()
+		loc.save()
+
+		return HttpResponseRedirect(reverse('home'))

@@ -8,8 +8,15 @@ def get_weather(lat,lon):
 	res = requests.get(URL)
 	if res.status_code == 200:
 		weather = json.loads(res.text)
-		return {'high': weather['properties']['periods'][0]['temperature'],
-			'low': weather['properties']['periods'][1]['temperature'],
+		if weather['properties']['periods'][0]['isDaytime']:
+			h_i = 0
+			l_i = 1
+		else:
+			h_i = 1
+			l_i = 0
+
+		return {'high': weather['properties']['periods'][h_i]['temperature'],
+			'low': weather['properties']['periods'][l_i]['temperature'],
 			'wind_speed': weather['properties']['periods'][0]['windSpeed'],
 			'short_forecast': weather['properties']['periods'][0]['shortForecast'],
 			'detailed_forecast': weather['properties']['periods'][0]['detailedForecast'],}
