@@ -46,7 +46,7 @@ class LocationCreate(LoginRequiredMixin, CreateView):
 
 			loc.save()
 
-		person = Person.objects.get(user=self.request.user)
+		person = self.request.user.person
 		person.location.add(loc)
 
 		return HttpResponseRedirect(reverse('person:detail', kwargs={'pk': person.pk}))
@@ -87,5 +87,21 @@ class LocationRefresh(View):
 		loc.detailed_forecast = weather_dict['detailed_forecast']
 		loc.last_update = timezone.now()
 		loc.save()
+
+		return HttpResponseRedirect(reverse('home'))
+
+class LocationRefreshAll(View):
+	def get(self, request):
+		person = request.user.person
+
+		location_list = person.location.all()
+		for loc in location_list:
+			weather_dict = get_weather(loc.lat, loc.lon)
+			loc.high = weather_dict['high']
+			loc.low = weather_dict['low']
+			loc.short_forecast = weather_dict['short_forecast']
+			loc.detailed_forecast = weather_dict['detailed_forecast']
+			loc.last_update = timezone.now()
+			loc.save()
 
 		return HttpResponseRedirect(reverse('home'))
