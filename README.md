@@ -2,9 +2,9 @@
 
 This can be run from the manage.py server. I usually set up gunicorn for production projects, which this is not.
 
-Don't forget to install `requirements.txt`
+Don't forget to `pip` install `requirements.txt`. See Dependencies section for more info.
 
-This uses sqlite throught the django ORM. Feel free to configure a different DB, but the default settings are left in place.
+This uses sqlite through the django ORM. Feel free to configure a different DB, but the default settings are left in place.
 
 ## Overview
 
@@ -14,9 +14,9 @@ Weather loader/viewer example program in python/django/jquery/bootstrap
 
 Anyone can create a user with a username/password. I find that the django authentication system is as easy as anything so I just used that, so you have to put in a password.
 
-Creating a user will log you in. From there, you can add locations. The location system is very simple, and only accepts zipcodes. The zipcodes are looked up in the google maps api to get location information.
+Creating a user will log you in (you can also log back in if you log out of course). From there you can add locations. The location system is very simple and only accepts zipcodes. Further location information is retrieved through the google maps API.
 
-Each location will show up in your list. Locations can only be added once. If a different user has already added a location, you will see data for it. If not, the location data will be initially blank.
+Each location will show up in your list. Locations can only be added once. If a different user has already added a location, you will see data for it initially. If not, the location data will be initially blank.
 
 Refresh buttons are provided for each data row. If JS is enabled the refresh will be done by AJAX. Otherwise, a pageload will cover it. There is a convenient bug in the JSon generator view that makes it slightly more obvious when a location refresh has completed because the date format changes.
 
@@ -30,26 +30,25 @@ Since django provides an easy login system, I put that in for managing users. Ho
 
 ### Location Data and API
 
-I used the google maps API to get location data. I grabbed a python library for looking up zipcodes first (zipcode on pip) but then realized it was loading an sqlite database which wasn't super convenient. Since we're hitting a weather API anyway, the maps API was an easy way to get location data (The weather API wants lat/lon, and it seems a stretch to ask a user for that). Looking up locations by name would likely be possible this way as well. Since we're getting the data anyway, I added a little of that data to display as well.
+I used the google maps API to get location data. I grabbed a python library for looking up zipcodes first (`zipcode` on pip) but then realized it was loading an sqlite database which wasn't super convenient. Since we're hitting a weather API anyway, the maps API was an easy way to get location data (The weather API wants lat/lon, and it seems a stretch to ask a user for that). Looking up locations by name would likely be possible this way as well.
 
 I avoid hitting the location API excessively by storing each location only once. The api `GET` is only requested when the location is initially added.
 
 ### Weather API
 
-The National Weather Service provides an API for their weather data. Since that's public data I used that (your tax dollars at work). It was also a very simple interface that just needed lat/lon.
+The National Weather Service provides an API for their weather data. Since that's public data I used that (your tax dollars at work). It was also a very simple interface that just needed lat/lon and provided a JSON blob.
 
-The weather API is hit on every `refresh`. When the location detail page is requested the weather is updated as well, unless it has already been updated within 5 minutes.
+The weather API is hit on every click of `refresh`. When the location detail page is requested the weather is updated as well, unless it has already been updated within 5 minutes.
 
 ### Database
 
-I used the django ORM for this project since I was in django anyway. Since I built it in django, and this project isn't expanding into anything, I let django default to sqlite rather than configuring MySQL.
+I used the django ORM for this project so I just left the db settings on sqlite.
 
 ### Additional Dependencies
 
-I'm not a designer so I used bootstrap for this project. Even if I were a designer I'd probably use it since it makes layouts easy. I also grabbed the `django-bootstrap3` PyPi lib which gives easy CDN links. This was the first time I'd used the `django-bootstrap3` lib and it was fine, but I'm not sure it was worth the requirement.
+I'm not a designer so I used bootstrap for this project. Even if I were a designer I'd probably use it since it makes layouts easy. I also grabbed the `django-bootstrap3` PyPi lib which gives easy CDN links as well as some other templates tags. This was the first time I'd used the `django-bootstrap3` lib and it was fine, but I'm not sure it was worth the requirement.
 
 For the front end I used JQuery, so I also put a CDN link in. You can find these in `apax_challenge/person/templates/person/base.html` by the way.
-
 
 ## Known Issues
 
