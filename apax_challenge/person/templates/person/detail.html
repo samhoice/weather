@@ -23,6 +23,8 @@ function refreshLinkCallbackFactory(jqobj) {
 				.html(data['short_forecast'])
 			row.children('.lastup-col')
 				.html(data['last_update'])
+		}).fail(function (){
+			alert("Api Call Failed")
 		})
 	}
 }
