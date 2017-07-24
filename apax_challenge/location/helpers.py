@@ -3,6 +3,10 @@ import json
 
 
 def get_weather(lat,lon):
+	""" Utility function to get the weather data from the NWS API
+
+	Requres lat/lon. Just a get request to the api server
+	"""
 	URL = 'http://api.weather.gov/points/{},{}/forecast'.format(lat, lon)
 
 	res = requests.get(URL)

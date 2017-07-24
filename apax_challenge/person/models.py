@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 
 from location.models import Location
 
-# Create your models here.
 class Person(models.Model):
+	""" Very simple person model """
 	user = models.OneToOneField(User)
 	location = models.ManyToManyField(Location)
 

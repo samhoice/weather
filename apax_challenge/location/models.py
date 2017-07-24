@@ -3,6 +3,15 @@ from django.db import models
 from django.core.urlresolvers import reverse
 
 class Location(models.Model):
+	""" The could (should?) be broken into two, to separate the weather
+	data. This is easy, and since this is the end of this project...
+
+	Save the location information and don't load it twice
+
+	Save the most recent weather data, and when we loaded it in case we
+	want to cache it
+
+	"""
 	zipcode = models.CharField(max_length=5)
 	city = models.CharField(max_length=128)
 	state = models.CharField(max_length=128)

@@ -1,16 +1,63 @@
 {% extends "person/base.html" %}
 
 
+{% block script %}
+<script type="text/javascript">
+
+/* Create a callback function for the 'refresh' links
+ * we'll also use this for refreshing everything */
+function refreshLinkCallbackFactory(jqobj) {
+	return function (e) {
+		e.preventDefault()
+
+		$.ajax({
+			url: "/l/r/" + jqobj.attr('id') + "/j/"
+		}).done(function (data, status) {
+			var obj = jqobj
+			var row = obj.parents(".weather-table-row")
+			row.children('.hightemp-col')
+				.html(data['high'])
+			row.children('.lowtemp-col')
+				.html(data['low'])
+			row.children('.fore-col')
+				.html(data['short_forecast'])
+			row.children('.lastup-col')
+				.html(data['last_update'])
+		})
+	}
+}
+
+/* refreshAll by just grabbing the callback and calling it for each function.
+ * This function (or the AJAX JSon generator) actually contains a bug in that
+ * the date it formatted wrong, but it gives a nice visual indication of the
+ * update
+ */
+function refreshAll(e) {
+	$('.ajax_link').each(function(idx) {
+		f = refreshLinkCallbackFactory($(this))
+		f(e)
+	})
+}
+
+/* Document ready */
+$(function() {
+	$('.ajax_link').each(function (idx) {
+		$(this).on('click', refreshLinkCallbackFactory($(this)))
+	})
+
+	$('#refresh-all').on('click', refreshAll)
+})
+</script>
+{% endblock %}
+
 {% block title %}Locations for {{ person.user.username }}{% endblock %}
 
 {% block body %}
-
 <h3>
 {{ person.user.username }}
 </h3>
 
 <table class="table table-striped">
-
 <tr>
 	<th>Location</th>
 	<th>High</th>
@@ -21,32 +68,34 @@
 </tr>
 
 {% for loc in person.location.all %}
-<tr>
+<tr class="weather-table-row">
 	<td>
 		<a href="{% url 'location:detail' loc.pk %}">
 		{{ loc.city }}, {{ loc.state }} {{ loc.zipcode }}
 		</a>
 	</td>
-	<td>
+	<td class="hightemp-col">
 		{{ loc.high }}
 	</td>
-	<td>
+	<td class="lowtemp-col">
 		{{ loc.low }}
 	</td>
-	<td>
+	<td class="fore-col">
 		{{ loc.short_forecast }}
 	</td>
-	<td>
+	<td class="lastup-col">
 		{{ loc.last_update }}
 	</td>
 	<td>
-		<a href="{% url 'location:refresh' loc.pk %}"><span class="glyphicon glyphicon-refresh"></span></a>
+		<!-- Refresh links are bogus now since the JS replaces them, but if you turn off
+		JS this should fallback I guess -->
+		<a id="{{loc.pk}}" class="ajax_link" href="{% url 'location:refresh' loc.pk %}"><span class="glyphicon glyphicon-refresh"></span></a>
 	</td>
 </tr>
 
 {% endfor %}
 </table>
 
-<a href="{% url 'location:refresh_all' %}"><span class="glyphicon glyphicon-refresh"></span> Refresh All</a>
+<a id="refresh-all" href="{% url 'location:refresh_all' %}"><span class="glyphicon glyphicon-refresh"></span> Refresh All</a>
 
 {% endblock %}

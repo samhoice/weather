@@ -1,5 +1,15 @@
 {% load bootstrap3 %}
 
+<!-- Basic layout for overrides.
+	Defines empty title, body, and script blocks. These can (and should) be
+	overridden by the various templates
+  -->
+
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
@@ -62,4 +72,9 @@
 </div>
 
 </body>
+
+{% block script %}
+<script>
+</script>
+{% endblock %}
 </html>

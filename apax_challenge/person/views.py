@@ -11,6 +11,7 @@ from django.contrib.auth import login
 from .models import Person
 
 class PersonHome(View):
+	""" Kind of a crude redirect to the login page. SHould just rewrite URLs I guess """
 	def get(self, request):
 		if request.user.is_authenticated:
 			user = request.user.pk
@@ -20,20 +21,30 @@ class PersonHome(View):
 			return HttpResponseRedirect(reverse('person:login'))
 
 class PersonView(DetailView):
+	""" Shows us a person page """
 	model = Person
 	template_name = 'person/detail.html'
 
 class PersonForm(forms.Form):
+	""" New user and login form """
 	name = forms.CharField()
 	password = forms.CharField(widget=forms.PasswordInput)
+	def clean_name(self):
+		""" No duplicates """
+		field = self.cleaned_data['name']
+		if User.objects.filter(username=field):
+			raise forms.ValidationError('Name is in use')
+
+		return field
 
 class PersonCreate(FormView):
+	""" Create a user """
 	form_class = PersonForm
 	template_name = "person/create.html"
 	success_url = '/'
 
 	def form_valid(self, form):
-
+		""" Create a user and link it to a new Person"""
 		username = form.cleaned_data['name']
 		pw = form.cleaned_data['password']
 
